@@ -70,7 +70,9 @@ CREATE OR REPLACE VIEW pts_cnr_selec AS SELECT pts_cenarios.fid, pts_cenarios.pt
 FROM pts_cenarios, cenarios
 WHERE pts_cenarios.cod_cenario = cenarios.cod_cenario AND cenarios.referencia = 'Parque Gomm - Praça 29 março'
 
-
+-- Consulta para filtrar ruas de acordo com as valencias
+SELECT * FROM emoc_ways_vlc_rua WHERE vlc_maior_text = 'Positivo'
+UNION SELECT * FROM emoc_ways_vlc_rua WHERE vlc_maior_text = 'Negativo'
 
 
 

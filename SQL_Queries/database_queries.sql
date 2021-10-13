@@ -107,3 +107,17 @@ WHERE cod_emoji_20 IS NULL;
 
 CREATE table emoc_count_ways_copy AS
 SELECT * FROM emoc_count_ways
+
+-- Atribuindo as valencias prevalecentes nas ruas
+CREATE OR REPLACE VIEW emoc_count_ways_vlc_maior AS
+SELECT fid, osm_id, geom, vlc_positivo, vlc_negativo, vlc_neutro, GREATEST(vlc_positivo, vlc_negativo, vlc_neutro) AS vlc_maior
+FROM emoc_count_ways_vlc
+GROUP BY fid, osm_id, geom
+
+CREATE OR REPLACE VIEW emoc_ways_vlc_rua AS
+SELECT fid, osm_id, geom, vlc_positivo, vlc_neutro, vlc_negativo, vlc_maior,
+	CASE 
+		WHEN vlc_maior = vlc_positivo THEN 'Positivo'
+		WHEN vlc_maior = vlc_negativo THEN 'Negativo'
+		ELSE 'Neutro' END AS vlc_maior_text
+	FROM emoc_count_ways_vlc_maior
