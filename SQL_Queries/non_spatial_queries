@@ -1,0 +1,110 @@
+-- %%%%% EMOÇÕES %%%%%
+-- Contagem emoções total 
+SELECT emoji_emoc.emocao, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji
+GROUP BY emoji_emoc.emocao
+ORDER BY contagem DESC;
+
+-- Contagem emoções total por cenário (Quantas emoções foram mapeadas em cada um dos cenários)
+SELECT cenarios.referencia, emocoes_coletadas.cod_cenario, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, cenarios
+WHERE emocoes_coletadas.cod_cenario = cenarios.cod_cenario
+GROUP BY emocoes_coletadas.cod_cenario, cenarios.referencia
+ORDER BY contagem DESC;
+
+-- Contagem de emoções por cenário: Quantas vezes cada uma das emoções aparece em cada cenário
+SELECT emoji_emoc.emocao, emocoes_coletadas.cod_cenario, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji
+GROUP BY emoji_emoc.emocao, emocoes_coletadas.cod_cenario
+ORDER BY emocao ASC, cod_cenario ASC;
+
+-- Contagem de emoções por gênero
+SELECT emoji_emoc.emocao, participantes.genero, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc, participantes
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji 
+AND emocoes_coletadas.cod_part = participantes.cod_part
+GROUP BY emoji_emoc.emocao, participantes.genero
+ORDER BY emocao ASC;
+
+-- Contagem de emoções por faixa etária
+SELECT emoji_emoc.emocao, participantes.faixa_etaria, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc, participantes
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji 
+AND emocoes_coletadas.cod_part = participantes.cod_part
+GROUP BY emoji_emoc.emocao, participantes.faixa_etaria
+ORDER BY emocao ASC;
+
+-- Contagem de emoções por modal
+SELECT emoji_emoc.emocao, modais.nome, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc, modais, participantes
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji 
+AND emocoes_coletadas.cod_part = participantes.cod_part
+AND participantes.cod_modal = modais.cod_modal
+GROUP BY emoji_emoc.emocao, modais.nome
+ORDER BY emocao ASC;
+
+-- %%%%% VALENCIA %%%%%
+-- Contagem valencia total 
+SELECT emoji_emoc.valencia, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji
+GROUP BY emoji_emoc.valencia
+ORDER BY contagem DESC;
+
+-- Contagem valencia total por cenário
+SELECT cenarios.referencia, emoji_emoc.valencia, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc, cenarios
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji 
+AND emocoes_coletadas.cod_cenario = cenarios.cod_cenario
+GROUP BY emoji_emoc.valencia, emocoes_coletadas.cod_cenario, cenarios.referencia
+ORDER BY cenarios.referencia ASC;
+
+-- Contagem valencia por gênero
+SELECT emoji_emoc.valencia, participantes.genero, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc, participantes
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji 
+AND emocoes_coletadas.cod_part = participantes.cod_part
+GROUP BY emoji_emoc.valencia, participantes.genero
+ORDER BY valencia ASC;
+
+-- Contagem valencia por faixa etária
+SELECT emoji_emoc.valencia, participantes.faixa_etaria, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc, participantes
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji 
+AND emocoes_coletadas.cod_part = participantes.cod_part
+GROUP BY emoji_emoc.valencia, participantes.faixa_etaria
+ORDER BY valencia ASC;
+
+-- Contagem valencia por modal
+SELECT emoji_emoc.valencia, modais.nome, count(emocoes_coletadas.cod_emoji) AS contagem 
+FROM emocoes_coletadas, emoji_emoc, modais, participantes
+WHERE emocoes_coletadas.cod_emoji = emoji_emoc.cod_emoji 
+AND emocoes_coletadas.cod_part = participantes.cod_part
+AND participantes.cod_modal = modais.cod_modal
+GROUP BY emoji_emoc.valencia, modais.nome
+ORDER BY valencia ASC;
+
+-- %%%%% PARTICIPANTES %%%%%
+-- Contagem de participantes por gênero
+SELECT genero, count(cod_part) as contagem
+FROM participantes
+GROUP BY genero;
+
+-- Contagem de participantes por feixa etária
+SELECT faixa_etaria, count(cod_part) as contagem
+FROM participantes
+GROUP BY faixa_etaria;
+
+-- Contagem de participantes por modal
+SELECT modais.nome, count(participantes.cod_part) as contagem
+FROM participantes, modais
+WHERE participantes.cod_modal = modais.cod_modal
+GROUP BY modais.nome;
+
+-- Contagem de participantes por cenário
+SELECT cenarios.referencia, count(DISTINCT emocoes_coletadas.cod_part) as contagem
+FROM emocoes_coletadas, cenarios
+WHERE emocoes_coletadas.cod_cenario = cenarios.cod_cenario
+GROUP BY cenarios.referencia;
