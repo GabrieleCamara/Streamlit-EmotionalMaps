@@ -1,2 +1,2 @@
 # Streamlit-EmotionalMaps
-### Author: Gabriele Camara
+## Author: Gabriele Camara
